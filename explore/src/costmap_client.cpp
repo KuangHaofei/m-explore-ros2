@@ -263,8 +263,8 @@ std::array<unsigned char, 256> init_translation_table()
 
   // lineary mapped from [0..100] to [0..255]
   for (size_t i = 0; i < 256; ++i) {
-    cost_translation_table[i] =
-        static_cast<unsigned char>(1 + (251 * (i - 1)) / 97);
+    // cost_translation_table[i] = static_cast<unsigned char>(1 + (251 * (i - 1)) / 97);
+    cost_translation_table[i] = 0;
   }
 
   // special values:

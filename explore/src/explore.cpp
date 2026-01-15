@@ -199,7 +199,10 @@ void Explore::visualizeFrontiers(
   for (auto& frontier : frontiers) {
     m.type = visualization_msgs::msg::Marker::POINTS;
     m.id = int(id);
-    // m.pose.position = {}; // compile warning
+    m.pose.position.x = 0.0;
+    m.pose.position.y = 0.0;
+    m.pose.position.z = 0.0;
+    m.pose.orientation.w = 1.0;
     m.scale.x = 0.1;
     m.scale.y = 0.1;
     m.scale.z = 0.1;
@@ -305,7 +308,15 @@ void Explore::makePlan()
   // send goal to move_base if we have something new to pursue
   auto goal = nav2_msgs::action::NavigateToPose::Goal();
   goal.pose.pose.position = target_position;
-  goal.pose.pose.orientation.w = 1.;
+
+  double yaw = atan2(target_position.y - pose.position.y,
+                     target_position.x - pose.position.x);
+  // Convert yaw to quaternion
+  tf2::Quaternion quaternion;
+  quaternion.setRPY(0.0, 0.0, yaw);
+  goal.pose.pose.orientation = tf2::toMsg(quaternion);
+  
+  // goal.pose.pose.orientation.w = 1.;
   goal.pose.header.frame_id = costmap_client_.getGlobalFrameID();
   goal.pose.header.stamp = this->now();
 
