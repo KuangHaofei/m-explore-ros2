@@ -332,6 +332,7 @@ void Explore::makePlan()
         reachedGoal(result, target_position);
       };
   move_base_client_->async_send_goal(goal, send_goal_options);
+  RCLCPP_INFO(logger_, "Goal sent to move base nav2, target position: %f, %f", target_position.x, target_position.y);
 }
 
 void Explore::returnToInitialPose()
